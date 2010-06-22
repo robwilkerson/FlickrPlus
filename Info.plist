@@ -47,7 +47,9 @@
 			<string>Some</string>
 		</dict>
 	</dict>
+	<key>Update Manifest URL</key>
+	<string>http://robwilkerson.org/_resources/projects/safari/extensions/FlickrPlus-update.plist</string>
 	<key>Website</key>
-	<string>http://robwilkerson.org</string>
+	<string>http://codaset.com/robwilkerson/flickrplus/wiki/home</string>
 </dict>
 </plist>
