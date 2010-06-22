@@ -1,6 +1,6 @@
 # FlickrPlus Safari Extension
 
-A collection of tools designed to improve the Flickr experience.
+A collection of tools intended to improve the Flickr experience for those using Safari 5.
 
 ## Installation
 
