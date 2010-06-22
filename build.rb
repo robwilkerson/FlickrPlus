@@ -35,5 +35,4 @@ puts '  2. SCP the compiled extension and the updater as shown below.'
 
 puts ''
 
-puts 'scp AddToGoogle.safariextz AddToGoogle-update.plist robwilkerson:www/_resources/projects/safari/extensions'
-puts 'scp AddToGoogle-update.plist robwilkerson:www/_resources/projects/safari/extensions/AddToGoogle.plist'
+puts 'scp FlickrPlus.safariextz FlickrPlus-update.plist robwilkerson:www/_resources/projects/safari/extensions'
