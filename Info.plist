@@ -11,7 +11,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0.0</string>
+	<string>0.5.0</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>Chrome</key>
@@ -38,8 +38,13 @@
 	<dict>
 		<key>Website Access</key>
 		<dict>
+			<key>Allowed Domains</key>
+			<array>
+				<string>*.flickr.com</string>
+				<string>flickr.com</string>
+			</array>
 			<key>Level</key>
-			<string>All</string>
+			<string>Some</string>
 		</dict>
 	</dict>
 	<key>Website</key>
