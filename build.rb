@@ -3,7 +3,7 @@
 require 'logger'
 require 'FileUtils'
 
-build_dir = '../builds/' + File.basename( FileUtils.pwd )
+build_dir = '../builds/' + File.basename( FileUtils.pwd ).gsub( /Dev\.safariextension/, '.safariextension' )
 
 puts 'Generating a build in ' + build_dir
 puts '  -> Removing existing directory (' + build_dir + ')'
@@ -16,9 +16,9 @@ FileUtils.mkdir_p build_dir
 
 puts '  -> Archiving the latest copy of the master branch'
 
-system 'git archive master | tar x -C ../builds/' + File.basename( FileUtils.pwd )
+system 'git archive master | tar x -C ' + build_dir
 
-puts 'Switching to the build directory'
+puts 'Switching to the build directory (' + build_dir + ')'
 
 Dir.chdir build_dir
 
