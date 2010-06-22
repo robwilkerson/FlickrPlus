@@ -8,7 +8,7 @@ build_dir = '../builds/' + File.basename( FileUtils.pwd )
 puts 'Generating a build in ' + build_dir
 puts '  -> Removing existing directory (' + build_dir + ')'
 
-FileUtils.rm_r build_dir
+FileUtils.rm_r build_dir if File.exists? build_dir
 
 puts '  -> Recreating the directory (' + build_dir + ')'
 
@@ -26,6 +26,9 @@ puts '  -> Deleting files not required for execution of the extension'
 
 FileUtils.rm Dir.glob( 'README.*' )
 FileUtils.rm Dir.glob( '*-update.plist' )
+FileUtils.rm_r 'css'
+FileUtils.rm_r 'img'
+FileUtils.rm %w( build.rb js/jquery.colorbox-min.js zoom.js )
 
 puts 'Done.'
 puts ''
