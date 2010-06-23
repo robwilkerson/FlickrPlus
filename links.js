@@ -18,7 +18,7 @@ $(document).ready( function() {
 		return html.join( ', ' );
 	}
 	
-	$('.PeopleTagList').before( '<div class="FlickrPlus"></div>' );
+	$('#faves_p').parent().after( '<div class="FlickrPlus"></div>' );
 	$('.FlickrPlus').html( '<h4>Flickr<strong>Plus</strong></h4>');
 	$('.FlickrPlus').append( function() {
 		return '<ul>' +
