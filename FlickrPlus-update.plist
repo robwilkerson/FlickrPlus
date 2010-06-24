@@ -10,9 +10,9 @@
        <key>Developer Identifier</key>
        <string>DYW2C252RK</string>
        <key>CFBundleVersion</key>
-       <string>4</string>
+       <string>5</string>
        <key>CFBundleShortVersionString</key>
-       <string>0.6.1</string>
+       <string>0.6.2</string>
        <key>URL</key>
        <string>http://robwilkerson.org/_resources/projects/safari/extensions/FlickrPlus.safariextz</string>
      </dict>

@@ -21,10 +21,29 @@ $(document).ready( function() {
 	$('#faves_p').parent().after( '<div class="FlickrPlus"></div>' );
 	$('.FlickrPlus').html( '<h4>Flickr<strong>Plus</strong></h4>');
 	$('.FlickrPlus').append( function() {
+		var short_uri = $('#shorturl').attr( 'href' ) != 'undefined'
+			? $('#shorturl').attr( 'href' )
+			: null;
+		
 		return '<ul>' +
 	         '<li class="Stats"><a href="http://fiveprime.org/blackmagic" rel="nofollow">View on Black</a></li>' +
 					 '<li class="Stats">View: ' + size_markup() + '</li>' +
-					 '<li class="Stats">Short URL: <a href="' + $('link[rev="canonical"]').attr( 'href' ) + '" rel="nofollow">' + $('link[href^="http://flic.kr/p/"]').attr( 'href' ) + '</a></li>' +
+					 '<li class="Stats">Short URL: ' + ( short_uri ? '<a href="' + $('#shorturl').attr( 'href' ) + '" rel="nofollow">' + $('#shorturl').attr( 'href' ) + '</a>' : 'Not Available' ) + '</li>' +
+					 '</ul>';
+	});
+	
+	/** For the new Flickr photo page */
+	$('#sidecar').prepend( '<div class="NeoFlickrPlus"></div>' );
+	$('.NeoFlickrPlus').html( '<h4>Flickr<strong>Plus</strong></h4>' );
+	$('.NeoFlickrPlus').append( function() {
+		var short_uri = $('#shorturl').attr( 'href' ) != 'undefined'
+			? $('#shorturl').attr( 'href' )
+			: null;
+			
+		return '<ul class="sidecar-list">' +
+	         '<li><span class="list-dot"></span><a href="http://fiveprime.org/blackmagic" rel="nofollow">View on Black</a></li>' +
+					 '<li><span class="list-dot"></span>View: ' + size_markup() + '</li>' +
+					 '<li><span class="list-dot"></span>Short URL: ' + ( short_uri ? '<a href="' + $('#shorturl').attr( 'href' ) + '" rel="nofollow">' + $('#shorturl').attr( 'href' ) + '</a>' : 'Not Available' ) + '</li>' +
 					 '</ul>';
 	});
 });
