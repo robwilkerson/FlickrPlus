@@ -21,14 +21,14 @@ $(document).ready( function() {
 	$('#faves_p').parent().after( '<div class="FlickrPlus"></div>' );
 	$('.FlickrPlus').html( '<h4>Flickr<strong>Plus</strong></h4>');
 	$('.FlickrPlus').append( function() {
-		var short_uri = $('#shorturl').attr( 'href' ) != 'undefined'
-			? $('#shorturl').attr( 'href' )
+		var short_uri = $('link[rev="canonical"]').attr( 'href' ) != 'undefined'
+			? $('link[rev="canonical"]').attr( 'href' )
 			: null;
 		
 		return '<ul>' +
 	         '<li class="Stats"><a href="http://fiveprime.org/blackmagic" rel="nofollow">View on Black</a></li>' +
 					 '<li class="Stats">View: ' + size_markup() + '</li>' +
-					 '<li class="Stats">Short URL: ' + ( short_uri ? '<a href="' + $('#shorturl').attr( 'href' ) + '" rel="nofollow">' + $('#shorturl').attr( 'href' ) + '</a>' : 'Not Available' ) + '</li>' +
+					 '<li class="Stats">Short URL: ' + ( short_uri ? '<a href="' + short_uri + '" rel="nofollow">' + short_uri + '</a>' : 'Not Available' ) + '</li>' +
 					 '</ul>';
 	});
 	
@@ -43,7 +43,7 @@ $(document).ready( function() {
 		return '<ul class="sidecar-list">' +
 	         '<li><span class="list-dot"></span><a href="http://fiveprime.org/blackmagic" rel="nofollow">View on Black</a></li>' +
 					 '<li><span class="list-dot"></span>View: ' + size_markup() + '</li>' +
-					 '<li><span class="list-dot"></span>Short URL: ' + ( short_uri ? '<a href="' + $('#shorturl').attr( 'href' ) + '" rel="nofollow">' + $('#shorturl').attr( 'href' ) + '</a>' : 'Not Available' ) + '</li>' +
+					 '<li><span class="list-dot"></span>Short URL: ' + ( short_uri ? '<a href="' + short_uri + '" rel="nofollow">' + short_uri + '</a>' : 'Not Available' ) + '</li>' +
 					 '</ul>';
 	});
 });
