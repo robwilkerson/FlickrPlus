@@ -21,11 +21,13 @@ $(document).ready( function() {
 	$('#faves_p').parent().after( '<div class="FlickrPlus"></div>' );
 	$('.FlickrPlus').html( '<h4>Flickr<strong>Plus</strong></h4>');
 	$('.FlickrPlus').append( function() {
+		var image_uri = $('link[rel="canonical"]').attr( 'href' );
 		var short_uri = $('link[rev="canonical"]').attr( 'href' ) != 'undefined'
 			? $('link[rev="canonical"]').attr( 'href' )
 			: null;
 		
 		return '<ul>' +
+					 '<li class="Stats">Image URL: <a href="' + image_uri + '" rel="nofollow">' + truncate( image_uri, 30, true ) + '</a></li>' +
 	         '<li class="Stats"><a href="http://fiveprime.org/blackmagic" rel="nofollow">View on Black</a></li>' +
 					 '<li class="Stats">View: ' + size_markup() + '</li>' +
 					 '<li class="Stats">Short URL: ' + ( short_uri ? '<a href="' + short_uri + '" rel="nofollow">' + short_uri + '</a>' : 'Not Available' ) + '</li>' +
@@ -36,14 +38,24 @@ $(document).ready( function() {
 	$('#sidecar').prepend( '<div class="NeoFlickrPlus"></div>' );
 	$('.NeoFlickrPlus').html( '<h4>Flickr<strong>Plus</strong></h4>' );
 	$('.NeoFlickrPlus').append( function() {
+		var image_uri = $('link[rel="canonical"]').attr( 'href' );
 		var short_uri = $('#shorturl').attr( 'href' ) != 'undefined'
 			? $('#shorturl').attr( 'href' )
 			: null;
 			
 		return '<ul class="sidecar-list">' +
+					 '<li class="Stats">Image URL: <a href="' + image_uri + '" rel="nofollow">' + truncate( image_uri, 35, true ) + '</a></li>' +
 	         '<li><span class="list-dot"></span><a href="http://fiveprime.org/blackmagic" rel="nofollow">View on Black</a></li>' +
 					 '<li><span class="list-dot"></span>View: ' + size_markup() + '</li>' +
 					 '<li><span class="list-dot"></span>Short URL: ' + ( short_uri ? '<a href="' + short_uri + '" rel="nofollow">' + short_uri + '</a>' : 'Not Available' ) + '</li>' +
 					 '</ul>';
 	});
 });
+
+function truncate( str, len, ellipsis ) {
+	if( str.length <= len ) {
+		return str;
+	}
+	
+	return str.substring( 0, len ) + ( ellipsis ? '...' : '' );
+}
