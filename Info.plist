@@ -15,10 +15,7 @@
 	<key>CFBundleVersion</key>
 	<string>7</string>
 	<key>Chrome</key>
-	<dict>
-		<key>Global Page</key>
-		<string>global.html</string>
-	</dict>
+	<dict/>
 	<key>Content</key>
 	<dict>
 		<key>Scripts</key>
@@ -29,6 +26,10 @@
 				<string>links.js</string>
 			</array>
 		</dict>
+		<key>Stylesheets</key>
+		<array>
+			<string>flickrplus.css</string>
+		</array>
 	</dict>
 	<key>Description</key>
 	<string>A collection of tools designed to improve the Flickr experience.</string>

@@ -44,10 +44,10 @@ $(document).ready( function() {
 			: null;
 			
 		return '<ul class="sidecar-list">' +
-					 '<li><span class="list-dot"></span>Image URL: <a href="' + image_uri + '" rel="nofollow">' + truncate( image_uri, 35, true ) + '</a></li>' +
+					 '<li class="truncate"><span class="list-dot"></span>Image URL: <a href="' + image_uri + '" rel="nofollow">' + image_uri + '</a></li>' +
 	         '<li><span class="list-dot"></span><a href="http://fiveprime.org/blackmagic" rel="nofollow">View on Black</a></li>' +
 					 '<li><span class="list-dot"></span>View: ' + size_markup() + '</li>' +
-					 '<li><span class="list-dot"></span>Short URL: ' + ( short_uri ? '<a href="' + short_uri + '" rel="nofollow">' + short_uri + '</a>' : 'Not Available' ) + '</li>' +
+					 '<li class="truncate"><span class="list-dot"></span>Short URL: ' + ( short_uri ? '<a href="' + short_uri + '" rel="nofollow">' + short_uri + '</a>' : 'Not Available' ) + '</li>' +
 					 '</ul>';
 	});
 });
