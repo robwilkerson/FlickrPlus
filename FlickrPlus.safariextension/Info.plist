@@ -20,9 +20,8 @@
 	<dict>
 		<key>Scripts</key>
 		<dict>
-			<key>Start</key>
+			<key>End</key>
 			<array>
-				<string>js/jquery-1.4.2.min.js</string>
 				<string>links.js</string>
 			</array>
 		</dict>
