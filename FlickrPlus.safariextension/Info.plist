@@ -15,7 +15,10 @@
 	<key>CFBundleVersion</key>
 	<string>8</string>
 	<key>Chrome</key>
-	<dict/>
+	<dict>
+		<key>Global Page</key>
+		<string>global.html</string>
+	</dict>
 	<key>Content</key>
 	<dict>
 		<key>Scripts</key>
@@ -28,6 +31,10 @@
 		<key>Stylesheets</key>
 		<array>
 			<string>flickrplus.css</string>
+		</array>
+		<key>Whitelist</key>
+		<array>
+			<string>http://*.flickr.com/photos/*</string>
 		</array>
 	</dict>
 	<key>Description</key>
@@ -43,6 +50,8 @@
 				<string>*.flickr.com</string>
 				<string>flickr.com</string>
 			</array>
+			<key>Include Secure Pages</key>
+			<true/>
 			<key>Level</key>
 			<string>Some</string>
 		</dict>

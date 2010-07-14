@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+
+<script type="text/javascript" charset="utf-8">
+	safari.application.addEventListener( 'message', handle_message, true );
+	
+	function handle_message( msg_event ) {
+		switch( msg_event.name ) {
+			case 'exif':
+				console.log( 'handling an exif message' );
+				var api_url = 'http://api.flickr.com/services/rest/?method=flickr.photos.getExif&api_key=087fd0994f29311679b71c6bc5d0b59e&photo_id=' + msg_event.message.photo_id;
+				
+				var req = new XMLHttpRequest();
+				req.open( 'GET', api_url, true );
+				req.onreadystatechange = function( e ) {  
+					if( req.readyState == 4 ) {  
+						if( req.status == 200 ) {
+							safari.application.activeBrowserWindow.activeTab.page.dispatchMessage( "exif", parse_exif_data( req.responseXML ) );
+						}
+					}  
+				};
+				req.send(null);
+				break;
+		}
+	}
+	
+	function parse_exif_data( exif ) {
+		console.log( 'Parsing EXIF data' );
+		var exif_bits = exif.getElementsByTagName( 'exif' );
+		var exif = {
+			'DateTimeOriginal': { 'label': 'Taken on', 'value': null }
+			, 'FileModifyDate': { 'label': 'Posted to Flickr', 'value': null }
+			
+			, 'Model':        { 'label': 'Camera', 'value': null }
+			, 'FileType':     { 'File Type': '', 'value': null }
+			, 'MIMEType':     { 'label': 'MIME Type', 'value': null }
+			, 'ImageWidth':   { 'label': 'Image Width', 'value': null }
+			, 'ImageHeight':  { 'label': 'Image Height', 'value': null }
+			, 'ExposureTime': { 'label': 'Exposure', 'value': null }
+			, 'FNumber':      { 'label': 'Aperture', 'value': null }
+			, 'ISO':          { 'label': 'ISO Speed', 'value': null }
+			, 'Flash':        { 'label': 'Flash', 'value': null }
+			, 'FocalLength':  { 'label': 'Focal Length', 'value': null }
+			, 'FileSize':     { 'label': 'File Size', 'value': null }
+		};
+		
+		for( var i = 0; i < exif_bits.length; i++ ) {
+			var bit = exif_bits[i];
+			
+			console.log( '  --> Inspecting ' + bit.getAttribute( 'tag' ) );
+			
+			if( exif[bit.getAttribute( 'tag' )] && !exif[bit.getAttribute( 'tag' )].value ) {
+				exif[bit.getAttribute( 'tag' )].value = bit.querySelector( 'clean' )
+					? bit.querySelector( 'clean' ).textContent
+					: bit.querySelector( 'raw' ).textContent;
+					
+				console.log( '  --> Set ' + exif[bit.getAttribute( 'tag' )].label + ' = ' + exif[bit.getAttribute( 'tag' )].value );
+			}
+		}
+		
+		return exif;
+	}
+</script>
