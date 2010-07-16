@@ -4,3 +4,33 @@
 	white-space: nowrap;
 	width: 95%;
 }
+#exif-wrapper {
+	background: #333;
+	border: 2px solid #000;
+	border-radius: 10px;
+	color: #aaa;
+	display: none;
+	opacity: 0.95;
+	position: absolute;
+	width: 100%;
+	z-index: 1000;
+}
+	#exif-wrapper .pad {
+		margin: 10px !important;
+	}
+		#exif-wrapper .pad table {
+			border: none;
+			width: 100%;
+		}
+			#exif-wrapper .pad table caption {
+				border-bottom: 1px solid #fff;
+				color: #fff;
+				font-size: 125%;
+				font-weight: bold;
+			}
+			#exif-wrapper .pad table tr {
+				border-bottom: 1px solid #aaa;
+			}
+			#exif-wrapper .pad table td {
+				padding: 3px 0 !important;
+			}

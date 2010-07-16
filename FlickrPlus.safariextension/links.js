@@ -1,3 +1,5 @@
+const DEBUG = false
+
 /** Only engage if this is a photo page */
 if( document.querySelector( 'meta[name="medium"][content="image"]' ) ) {
 	safari.self.addEventListener( 'message', handle_message, true );
@@ -25,6 +27,7 @@ if( document.querySelector( 'meta[name="medium"][content="image"]' ) ) {
 		
 		return html.join( ', ' );
 	}
+	var exif = null;
 	
 	var base_element = new_layout
 		? document.querySelector( '#sidebar-contexts' )
@@ -40,11 +43,13 @@ if( document.querySelector( 'meta[name="medium"][content="image"]' ) ) {
 		list.appendChild( list_item( '<a href="http://fiveprime.org/blackmagic" rel="nofollow">View on Black</a>' ) );
 		list.appendChild( list_item( 'View: ' + size_markup() ) );
 		list.appendChild( list_item( 'Short URL: ' + ( short_uri ? '<a href="' + short_uri + '" rel="nofollow">' + short_uri + '</a>' : 'Not Available' ), true ) );
+		list.appendChild( list_item( '<a id="exif-link" href="#" rel="nofollow">Show Exif info</a>' ) );
 		
 		container.appendChild( header );
 		container.appendChild( list );
 		
 		container.className = 'FlickrPlus' + ( new_layout ? ' neo' : '' );
+		
 		
 		return container;
 	}
@@ -72,18 +77,20 @@ if( document.querySelector( 'meta[name="medium"][content="image"]' ) ) {
 	
 	base_element.appendChild( flickr_plus() );
 	safari.self.tab.dispatchMessage( 'exif', { 'photo_id': photo_id } );
+	document.querySelector( 'a#exif-link' ).addEventListener( 'click', toggle_exif_info, false );
 }
 
 /**
  * SUPPORTING FUNCTIONS
  */
 function handle_message( msg_event ) {
-	console.log( 'Handling message: ' + msg_event.name );
+	clog( 'Handling message: ' + msg_event.name );
 	
 	switch( msg_event.name ) {
 		case 'exif':
-			console.log( '  --> exif' );
-			console.log( msg_event.message );
+			clog( '  --> exif' );
+			clog( msg_event.message );
+			exif = msg_event.message;
 			break;
 	}
 }
@@ -91,8 +98,63 @@ function handle_message( msg_event ) {
 /**
  * Applies the EXIF data to the bottom of the FlickrPlus element.
  */
-function flickr_plus_exif( exif ) {
-	var flickr_plus = document.querySelector( '.Flick')
+function flickr_plus_exif() {
+	clog( 'Displaying exif info' );
+	
+	if( document.querySelector( '#exif-wrapper' ) ) {
+		return document.querySelector( '#exif-wrapper' );
+	}
+	
+	var container = document.createElement( 'div' );
+	var pad       = document.createElement( 'div' );
+	var info      = document.createElement( 'table' );
+	var title     = document.createElement( 'caption' );
+	
+	/** Build the Exif table */
+	info.appendChild( title );
+	for( var i = 0; i < exif.sequence.length; i++ ) {
+		var prop = exif[exif.sequence[i]];
+		
+		row   = document.createElement( 'tr' );
+		label = document.createElement( 'td' );
+		value = document.createElement( 'td' );
+		
+		label.innerText = prop.label + ':';
+		value.innerText = prop.value;
+		
+		row.appendChild( label );
+		row.appendChild( value );
+		info.appendChild( row );
+	}
+	
+	title.innerText = 'Exif Information';
+	
+	pad.appendChild( info );
+	container.appendChild( pad );
+	
+	info.setAttribute( 'cellspacing', 0 );
+	info.setAttribute( 'cellpadding', 0 );
+	container.setAttribute( 'id', 'exif-wrapper' );
+	pad.className = 'pad';
+	
+	document.querySelector( '.FlickrPlus' ).appendChild( container );
+	
+	return container;
+}
+
+function toggle_exif_info( e ) {
+	var exif = flickr_plus_exif();
+	
+	if( /^Show\s+/i.test( this.innerText ) ) {	
+		exif.setAttribute( 'style', 'display: block' );
+		this.innerText = 'Hide Exif info';
+	}
+	else {
+		exif.setAttribute( 'style', 'display: none' );
+		this.innerText = 'Show Exif info';
+	}
+
+	e.preventDefault();
 }
 
 /**
@@ -124,4 +186,10 @@ function truncate( str, len, ellipsis ) {
 	}
 	
 	return str.substring( 0, len ) + ( ellipsis ? '...' : '' );
+}
+
+function clog( msg ) {
+	if( DEBUG ) {
+		console.log( msg );
+	}
 }
