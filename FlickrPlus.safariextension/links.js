@@ -1,4 +1,4 @@
-const DEBUG = false
+const DEBUG = false;
 
 /** Only engage if this is a photo page */
 if( document.querySelector( 'meta[name="medium"][content="image"]' ) ) {
@@ -91,6 +91,12 @@ function handle_message( msg_event ) {
 			clog( '  --> exif' );
 			clog( msg_event.message );
 			exif = msg_event.message;
+			
+			/** If Exif data isn't available, hide the link */
+			if( !exif.Model.value ) {
+				document.querySelector( 'a#exif-link' ).style.display = 'none';
+			}
+			
 			break;
 	}
 }
