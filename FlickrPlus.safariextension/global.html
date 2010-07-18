@@ -76,12 +76,23 @@
 			}
 		}
 		
+		clog( 'Original: ' + exif.DateTimeOriginal.value );
+		clog( 'Modified: ' + exif.FileModifyDate.value );
+		
+		/** Format the date values */
+		var re_datetime = /^(\d{4}):(\d{2}):(\d{2}) (\d{2}):(\d{2}):(\d{2}).*$/;
+		var original    = new Date( exif.DateTimeOriginal.value.replace( re_datetime, '$2/$3/$1 $4:$5' ) );
+		var modified    = new Date( exif.FileModifyDate.value.replace( re_datetime, '$2/$3/$1 $4:$5' ) );
+		
+		exif.DateTimeOriginal.value = original.toUTCString();
+		exif.FileModifyDate.value   = modified.toUTCString();
+		
 		return exif;
 	}
 
-function clog( msg ) {
-	if( DEBUG ) {
-		console.log( msg );
+	function clog( msg ) {
+		if( DEBUG ) {
+			console.log( msg );
+		}
 	}
-}
 </script>

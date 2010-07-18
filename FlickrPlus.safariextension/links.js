@@ -83,6 +83,10 @@ if( document.querySelector( 'meta[name="medium"][content="image"]' ) ) {
 /**
  * SUPPORTING FUNCTIONS
  */
+
+/**
+ * Handle asynchronous messages sent from global.html
+ */
 function handle_message( msg_event ) {
 	clog( 'Handling message: ' + msg_event.name );
 	
