@@ -9,6 +9,7 @@
 		switch( msg_event.name ) {
 			case 'exif':
 				clog( 'handling an exif message' );
+				
 				var api_url = 'http://api.flickr.com/services/rest/?method=flickr.photos.getExif&api_key=087fd0994f29311679b71c6bc5d0b59e&photo_id=' + msg_event.message.photo_id;
 				
 				var req = new XMLHttpRequest();
@@ -16,13 +17,16 @@
 				req.onreadystatechange = function( e ) {  
 					if( req.readyState == 4 ) {  
 						if( req.status == 200 ) {
-							safari.application.activeBrowserWindow.activeTab.page.dispatchMessage( "exif", parse_exif_data( req.responseXML ) );
+							safari.application.activeBrowserWindow.activeTab.page.dispatchMessage( 'exif', parse_exif_data( req.responseXML ) );
 						}
 					}  
 				};
 				req.send(null);
 				break;
 		}
+		case 'short_photo_id':
+			safari.application.activeBrowserWindow.activeTab.page.dispatchMessage( 'short_photo_id', base58( msg_event.message ) );
+			break;
 	}
 	
 	function parse_exif_data( exif ) {
@@ -89,7 +93,7 @@
 		
 		return exif;
 	}
-
+	
 	function clog( msg ) {
 		if( DEBUG ) {
 			console.log( msg );
