@@ -1,14 +1,13 @@
 const DEBUG = true;
-var doc     = document;
+  var doc   = document;
 
 /** Only engage if this is a photo page */
-if( doc.querySelector( 'meta[name="medium"][content="image"]' ) ) {
+if( doc.querySelector( 'meta[name="medium"][content="image"]' ) && window === window.top ) {
 	safari.self.addEventListener( 'message', handle_message, true );
 	
 	var flickr_plus = {
 		/** PROPERTIES */
-		anchor:         doc.querySelector( '#sidebar-contexts' )
-		, img_base_uri: doc.querySelector( 'link[rel="canonical"]' ).getAttribute( 'href' ).replace( /\/$/, '' )
+		img_base_uri: doc.querySelector( 'link[rel="canonical"]' ).getAttribute( 'href' ).replace( /\/$/, '' )
 		, img_sizes: [
 				'Original'
 				, 'Large'
@@ -34,7 +33,7 @@ if( doc.querySelector( 'meta[name="medium"][content="image"]' ) ) {
 		}
 		, render: function() {
 				// Append document fragment to the larger document 
-				this.anchor.appendChild( this.fragment );
+				this.anchor().appendChild( this.fragment );
 		}
 		, title: function() {
 				var title = doc.createElement( 'h4' );
@@ -52,14 +51,13 @@ if( doc.querySelector( 'meta[name="medium"][content="image"]' ) ) {
 				clog( '--> Writing the "Short URL" link' );
 				links.appendChild( this.item( this.short_url() ) );
 				clog( '<-- Done' );
-				clog( '--> Writing the "View on black" link' );
-				links.appendChild( this.item( this.view_on_black() ) );
-				clog( '<-- Done' );
 				clog( '--> Writing the "View all sizes" links' );
 				links.appendChild( this.item( this.view_all_sizes() ) );
 				clog( '<-- Done' );
+				clog( '--> Writing the "View on black" link' );
+				links.appendChild( this.item( this.view_on_black() ) );
+				clog( '<-- Done' );
 				
-				addClass( links, 'sidecar-list' );
 				fragment.appendChild( links );
 				
 				return fragment;
@@ -69,8 +67,8 @@ if( doc.querySelector( 'meta[name="medium"][content="image"]' ) ) {
 				
 				clog( '----> Building the list item for ' + content_frag.textContent );
 				
-				var fragment = document.createDocumentFragment();
-				var item     = document.createElement( 'li' );
+				var fragment = doc.createDocumentFragment();
+				var item     = doc.createElement( 'li' );
 				
 				if( this.is_new_layout() ) {
 					var item_marker = doc.createElement( 'span' );
@@ -79,11 +77,11 @@ if( doc.querySelector( 'meta[name="medium"][content="image"]' ) ) {
 					item.appendChild( item_marker );
 				}
 				else {
-					addClass( item, 'Stats' );
+					addClass( item, 'Stats stats-featured' );
 				}
 				
 				if( truncate ) {
-					addClass( item, 'truncate' );
+					addClass( item, this.is_new_layout() ? 'truncate' : 'trunc' );
 				}
 				
 				item.appendChild( content_frag );
@@ -139,9 +137,9 @@ if( doc.querySelector( 'meta[name="medium"][content="image"]' ) ) {
 					var size      = links[i];
 					var abbrev    = size.toLowerCase().substr( 0, 2 );
 					
-					var link      = document.createElement( 'a' );
-					var link_text = document.createTextNode( size );
-					var delimiter = document.createTextNode( i < len - 1 ? ', ' : '' );
+					var link      = doc.createElement( 'a' );
+					var link_text = doc.createTextNode( size );
+					var delimiter = doc.createTextNode( i < len - 1 ? ', ' : '' );
 					
 					if( size.toLowerCase() != 'square' ) {
 						link.setAttribute( 'href', this.img_base_uri + '/sizes/' + abbrev.charAt( 0 ) );
@@ -175,6 +173,12 @@ if( doc.querySelector( 'meta[name="medium"][content="image"]' ) ) {
 				fragment.appendChild( link );
 				
 				return fragment;
+		}
+		/**
+		 * Retrieves the anchor on which the FlickrPlus container will be appended.
+		 */
+		, anchor: function() {
+				return this.is_new_layout() ? doc.querySelector( '#sidebar-contexts' ) : doc.querySelector( '.ContextsOther' )
 		}
 		/** 
 		 * Determines whether the user is browsing Flickr's new 
@@ -238,15 +242,6 @@ function handle_message( msg_event ) {
 			break;
 	}
 	*/ 
-}
-
-/** TODO: Removed this? */
-function truncate( str, len, ellipsis ) {
-	if( str.length <= len ) {
-		return str;
-	}
-	
-	return str.substring( 0, len ) + ( ellipsis ? '...' : '' );
 }
 
 /** 
