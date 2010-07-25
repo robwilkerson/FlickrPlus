@@ -1,4 +1,4 @@
-const DEBUG = true;
+const DEBUG = false;
   var doc   = document;
 
 /** Only engage if this is a photo page and the topmost window */
