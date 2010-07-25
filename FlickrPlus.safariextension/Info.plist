@@ -26,6 +26,7 @@
 			<key>End</key>
 			<array>
 				<string>links.js</string>
+				<string>exif.js</string>
 			</array>
 		</dict>
 		<key>Stylesheets</key>

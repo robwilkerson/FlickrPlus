@@ -1,51 +1,92 @@
-.truncate {
+.truncate
+, .trunc {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	width: 95%;
 }
-#exif-control {
-	background: #0063dc;
-	border: 1px solid #ff0084;
-	display: block;
-	height: 50px;
-	width: 50px;
-	
-	-webkit-border-radius: 25px;
+
+/**
+ * Classes applied to create the "card"
+ */
+.card {
+	-webkit-transition-property: -webkit-transform;
+	-webkit-transform-style: preserve-3d;
+	-webkit-transition: 1.5s;
 }
-#exif-control.disabled {
+
+.card.flipped {
+	cursor: pointer;
+	-webkit-transform: rotateY(180deg);
+}
+.face {
+	position: relative;
+	-webkit-backface-visibility: hidden;
+}
+.front {
+	
+}
+.back {
+	-webkit-transform: rotateY(180deg);
+}
+
+/** Modify a few Flickr DOM classes */
+#photo {
+	position: relative;
+	-webkit-perspective: 2500;
+}
+#photo-drag-proxy.flipped {
 	display: none;
 }
+
+/**
+ * The "info" icon
+ */
+#exif-trigger {
+	bottom: 0;
+	cursor: pointer;
+	display: block;
+	margin: 0 10px 10px 0;
+	position: absolute;
+	right: 0;
+	z-index: 1000;
+}
+#exif-trigger.flipped {
+	display: none;
+}
+
+/**
+ * The table displaying the exif info
+ */
 #exif-wrapper {
 	background: #333;
 	border: 2px solid #000;
 	border-radius: 10px;
 	color: #aaa;
-	opacity: 0;
 	position: absolute;
-	width: 100%;
-	z-index: 1000;
-	-webkit-transition: opacity 500ms ease-in;
+	right: 0;
+	top: 0;
 }
-#exif-wrapper.visible {
-	opacity: 0.95;
-}
-	#exif-wrapper .pad {
-		margin: 10px !important;
+	#exif-wrapper table {
+		border: none;
+		margin: auto;
+		margin-top: 25px;
 	}
-		#exif-wrapper .pad table {
-			border: none;
-			width: 100%;
+		#exif-wrapper table caption {
+			border-bottom: 1px solid #fff;
+			color: #fff;
+			font-size: 125%;
+			font-weight: bold;
 		}
-			#exif-wrapper .pad table caption {
-				border-bottom: 1px solid #fff;
-				color: #fff;
-				font-size: 125%;
-				font-weight: bold;
-			}
-			#exif-wrapper .pad table tr {
-				border-bottom: 1px solid #aaa;
-			}
-			#exif-wrapper .pad table td {
-				padding: 3px 0 !important;
-			}
+		#exif-wrapper table tr {
+			border-bottom: 1px solid #aaa;
+		}
+		#exif-wrapper table td {
+			padding: 3px 0 !important;
+		}
+		#exif-wrapper table td.label {
+			padding-right: 25px !important;
+		}
+		#exif-wrapper table td.value {
+			padding-left: 25px !important;
+		}

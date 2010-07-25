@@ -6,11 +6,14 @@
 	const DEBUG = false;
 	
 	function handle_message( msg_event ) {
+		clog( 'Handling message: ' + msg_event.name );
+		
 		switch( msg_event.name ) {
 			case 'exif':
-				clog( 'handling an exif message' );
+				var photo_id = msg_event.message;
+				var api_url  = 'http://api.flickr.com/services/rest/?method=flickr.photos.getExif&api_key=087fd0994f29311679b71c6bc5d0b59e&photo_id=' + photo_id;
 				
-				var api_url = 'http://api.flickr.com/services/rest/?method=flickr.photos.getExif&api_key=087fd0994f29311679b71c6bc5d0b59e&photo_id=' + msg_event.message.photo_id;
+				clog( 'Kicking off an ajax request for exif info on photo ' + photo_id );
 				
 				var req = new XMLHttpRequest();
 				req.open( 'GET', api_url, true );
@@ -18,85 +21,80 @@
 					if( req.readyState == 4 ) {  
 						if( req.status == 200 ) {
 							safari.application.activeBrowserWindow.activeTab.page.dispatchMessage( 'exif', parse_exif_data( req.responseXML ) );
+							clog( 'Success' );
 						}
 					}  
 				};
-				req.send(null);
+				req.send( null );
 				break;
 		}
-		case 'short_photo_id':
-			safari.application.activeBrowserWindow.activeTab.page.dispatchMessage( 'short_photo_id', base58( msg_event.message ) );
-			break;
 	}
 	
-	function parse_exif_data( exif ) {
-		clog( 'Parsing EXIF data' );
+	function parse_exif_data( data ) {
+		clog( '--> Parsing EXIF data' );
 		
-		var exif_bits = exif.getElementsByTagName( 'exif' );
+		var exif_bits = data.getElementsByTagName( 'exif' );
 		var exif = {
-			'sequence': [
-				'DateTimeOriginal'
-				, 'FileModifyDate'
-				, 'Model'
-				, 'ExposureTime'
-				, 'FNumber'
-				, 'FocalLength'
-				, 'ISO'
-				, 'Flash'
-				, 'FileSize'
-				, 'FileType'
-				, 'MIMEType'
-				, 'ImageWidth'
-				, 'ImageHeight'
-			]
-			
-			, 'DateTimeOriginal': { 'label': 'Taken on'        , 'value': null }
-			, 'FileModifyDate': { 'label': 'Posted to Flickr', 'value': null }
-			
-			, 'Model':        { 'label': 'Camera'            , 'value': null }
-			, 'ExposureTime': { 'label': 'Exposure'          , 'value': null }
-			, 'FNumber':      { 'label': 'Aperture'          , 'value': null }
-			, 'FocalLength':  { 'label': 'Focal Length'      , 'value': null }
-			, 'ISO':          { 'label': 'ISO Speed'         , 'value': null }
-			, 'Flash':        { 'label': 'Flash'             , 'value': null }
-			, 'FileSize':     { 'label': 'File Size'         , 'value': null }
-			, 'FileType':     { 'label': 'File Type'         , 'value': null }
-			, 'MIMEType':     { 'label': 'MIME Type'         , 'value': null }
-			, 'ImageWidth':   { 'label': 'Image Width'       , 'value': null }
-			, 'ImageHeight':  { 'label': 'Image Height'      , 'value': null }
+			DateTimeOriginal: null
+			, FileModifyDate: null
+			, Model:          null
+			, ExposureTime:   null
+			, FNumber:        null
+			, FocalLength:    null
+			, ISO:            null
+			, Flash:          null
+			, FileSize:       null
+			, FileType:       null
+			, MIMEType:       null
+			, ImageWidth:     null
+			, ImageHeight:    null
 		};
 		
+		var empty = true;
 		for( var i = 0; i < exif_bits.length; i++ ) {
 			var bit = exif_bits[i];
 			
-			clog( '  --> Inspecting ' + bit.getAttribute( 'tag' ) );
+			clog( '----> Inspecting ' + bit.getAttribute( 'tag' ) );
 			
-			if( exif[bit.getAttribute( 'tag' )] && !exif[bit.getAttribute( 'tag' )].value ) {
-				exif[bit.getAttribute( 'tag' )].value = bit.querySelector( 'clean' )
+			
+			if( bit.getAttribute( 'tag' ) in exif && !exif[bit.getAttribute( 'tag' )] ) {
+				exif[bit.getAttribute( 'tag' )] = bit.querySelector( 'clean' )
 					? bit.querySelector( 'clean' ).textContent
 					: bit.querySelector( 'raw' ).textContent;
 					
-				clog( '  --> Set ' + exif[bit.getAttribute( 'tag' )].label + ' = ' + exif[bit.getAttribute( 'tag' )].value );
+				clog( '----> Set ' + bit.getAttribute( 'tag' ) + ' = ' + exif[bit.getAttribute( 'tag' )] );
+				var empty = false;
 			}
 		}
 		
-		clog( 'Original: ' + exif.DateTimeOriginal.value );
-		clog( 'Modified: ' + exif.FileModifyDate.value );
+		if( empty ) {
+			return null;
+		}
 		
-		/** Format the date values */
+		clog( '----> Formatting timestamps for some level of human readability' );
 		var re_datetime = /^(\d{4}):(\d{2}):(\d{2}) (\d{2}):(\d{2}):(\d{2}).*$/;
-		var original    = new Date( exif.DateTimeOriginal.value.replace( re_datetime, '$2/$3/$1 $4:$5' ) );
-		var modified    = new Date( exif.FileModifyDate.value.replace( re_datetime, '$2/$3/$1 $4:$5' ) );
+		var original    = new Date( exif.DateTimeOriginal.replace( re_datetime, '$2/$3/$1 $4:$5' ) );
+		var modified    = new Date( exif.FileModifyDate.replace( re_datetime, '$2/$3/$1 $4:$5' ) );
 		
-		exif.DateTimeOriginal.value = original.toUTCString();
-		exif.FileModifyDate.value   = modified.toUTCString();
+		exif.DateTimeOriginal = original.toUTCString();
+		exif.FileModifyDate   = modified.toUTCString();
+		
+		clog( '------> Updated original timestamp to ' + exif.DateTimeOriginal );
+		clog( '------> Updated modified timestamp to ' + exif.FileModifyDate );
+		
+		clog( '<---- Date formatting complete' );
+		clog( '<-- Exif parsing complete' );
 		
 		return exif;
 	}
 	
 	function clog( msg ) {
 		if( DEBUG ) {
-			console.log( msg );
+			/** 
+			 * If the message is just an object, then adding the log prefix prevents
+			 * us from being able to expand the object.
+			 */ 
+			console.log( typeof msg != 'object' ? 'FlickrPlus: ' + msg : msg );
 		}
 	}
 </script>
