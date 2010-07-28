@@ -1,6 +1,6 @@
 # FlickrPlus Safari Extension
 
-A collection of tools intended to improve the Flickr experience for those using Safari 5.
+The **[FlickrPlus](http://robwilkerson.org/_resources/projects/safari/extensions/FlickrPlus.safariextz)** extension adds a collection of links to the Flickr photo page sidebar. The links provide quick access to Flickr actions such as viewing an image on a black background, obtaining its short URL, seeing all sizes of the image, and more.
 
 ## Installation
 
