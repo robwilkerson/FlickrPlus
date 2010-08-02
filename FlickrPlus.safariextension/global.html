@@ -10,6 +10,12 @@
 		
 		switch( msg_event.name ) {
 			case 'exif':
+				if( !safari.extension.settings.exif ) {
+					clog( 'Exif setting disabled. Returning null.' );
+					safari.application.activeBrowserWindow.activeTab.page.dispatchMessage( 'exif', null );
+					break;
+				}
+				
 				var photo_id = msg_event.message;
 				var api_url  = 'http://api.flickr.com/services/rest/?method=flickr.photos.getExif&api_key=087fd0994f29311679b71c6bc5d0b59e&photo_id=' + photo_id;
 				
