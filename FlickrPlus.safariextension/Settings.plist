@@ -4,7 +4,7 @@
 <array>
 	<dict>
 		<key>DefaultValue</key>
-		<false/>
+		<true/>
 		<key>Key</key>
 		<string>exif</string>
 		<key>Title</key>

@@ -9,29 +9,29 @@
 /**
  * Classes applied to create the "card"
  */
-.card {
+.exif.card {
 	-webkit-transition-property: -webkit-transform;
 	-webkit-transform-style: preserve-3d;
 	-webkit-transition: 1.5s;
 }
 
-.card.flipped {
+.exif.card.flipped {
 	cursor: pointer;
 	-webkit-transform: rotateY(180deg);
 }
-.face {
+.exif.face {
 	position: relative;
 	-webkit-backface-visibility: hidden;
 }
-.front {
+.exif.front {
 	
 }
-.back {
+.exif.back {
 	-webkit-transform: rotateY(180deg);
 }
 
 /** Modify a few Flickr DOM classes */
-#photo {
+#photo.exif {
 	position: relative;
 	-webkit-perspective: 2500;
 }

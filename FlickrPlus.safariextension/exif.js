@@ -10,7 +10,8 @@ if( doc.querySelector( 'meta[name="medium"][content="image"]' ) && window === wi
 	var photo_id       = img_base_uri.split( '/' ).slice( -2 )[1];
 	
 	var card = {
-		anchor:    doc.querySelector( '.photo-div' )
+		photo:     doc.querySelector( '#photo' )
+		, anchor:  doc.querySelector( '.photo-div' )
 		, trigger: doc.createDocumentFragment()
 		, width:   doc.querySelector( '.photo-div img' ).offsetWidth
 		, height:  doc.querySelector( '.photo-div img' ).offsetHeight
@@ -25,8 +26,9 @@ if( doc.querySelector( 'meta[name="medium"][content="image"]' ) && window === wi
 				this.trigger = this.trigger();
 				
 				clog( '----> Adding classes to the anchor and image' );
-				addClass( this.anchor, 'card' );
-				addClass( this.anchor.firstElementChild, 'face front' );
+				addClass( this.photo, 'exif' );
+				addClass( this.anchor, 'exif card' );
+				addClass( this.anchor.firstElementChild, 'exif face front' );
 				
 				/**
 				 * Insert the trigger inside of the drag proxy because it's
@@ -52,7 +54,7 @@ if( doc.querySelector( 'meta[name="medium"][content="image"]' ) && window === wi
 				clog( fragment.firstChild );
 				
 				clog( '----> Applying CSS classes' );
-				addClass( content, 'face back' )
+				addClass( content, 'exif face back' )
 				
 				clog( '----> Setting dimensions' );
 				content.style.width  = this.width + 'px';
