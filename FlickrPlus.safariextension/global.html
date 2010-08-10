@@ -79,9 +79,10 @@
 		}
 		
 		clog( '----> Formatting timestamps for some level of human readability' );
-		var timezone    = exif.Timezone ? exif.Timezone.replace( /^\+?(\d{2}):?(\d{2}).*/, '+$1$2' ) : '';
+		var re_timezone = /^.*([-+]\d{2}):?(\d{2}).*$/;
+		var timezone    = exif.Timezone ? exif.Timezone.replace( re_timezone, '$1$2' ) : re_timezone.test( exif.DateTimeOriginal ) ? exif.DateTimeOriginal.replace( re_timezone, '$1$2' ) : '' ;
 		var original    = new Date( exif.DateTimeOriginal.replace( /^(\d{4}):(\d{2}):(\d{2}) (\d{2}):(\d{2}):(\d{2}).*$/, '$1/$2/$3 $4:$5:$6' ) + timezone );
-		var modified    = new Date( exif.FileModifyDate.replace( /^(\d{4}):(\d{2}):(\d{2}) (\d{2}):(\d{2}):(\d{2})\+(\d{2}):(\d{2}).*$/, '$1/$2/$3 $4:$5:$6+$7$8' ) );
+		var modified    = new Date( exif.FileModifyDate.replace( /^(\d{4}):(\d{2}):(\d{2}) (\d{2}):(\d{2}):(\d{2})([-+]\d{2}):(\d{2}).*$/, '$1/$2/$3 $4:$5:$6$7$8' ) );
 		
 		exif.DateTimeOriginal = original.toLocaleString();
 		exif.FileModifyDate   = modified.toLocaleString();
